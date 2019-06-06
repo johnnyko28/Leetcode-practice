@@ -1,4 +1,6 @@
-// We use an extra array in which we place every element of the array at its correct position i.e. the number at index ii in the original array is placed at the index (i+k)%(length of array)(i+k). 
+/* We use an extra array in which we place every element of the array at its correct position 
+i.e. the number at index ii in the original array is placed at the index (i+k)%(length of array)(i+k). 
+*/
 
 class Solution {
     public void rotate(int[] nums, int k) {
