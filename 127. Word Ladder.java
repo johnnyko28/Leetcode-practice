@@ -47,6 +47,7 @@ class Solution {
           if (adjacentWord.equals(endWord)) {
             return level + 1;
           }
+          
           // Otherwise, add it to the BFS Queue. Also mark it visited
           if (!visited.containsKey(adjacentWord)) {
             visited.put(adjacentWord, true);
