@@ -1,18 +1,19 @@
-    public List<Interval> merge(List<Interval> intervals) {
-        if (intervals == null || intervals.size() <= 1) return intervals;
-        Collections.sort(intervals, (a, b) -> a.start - b.start);
-        int start = intervals.get(0).start;
-        int end = intervals.get(0).end;
-        List<Interval> res = new ArrayList<>();
-        for (Interval interval : intervals) {
-            if (interval.start <= end) {
-                end = Math.max(end, interval.end);
-            } else {
-                res.add(new Interval(start, end));
-                start = interval.start;
-                end = interval.end;
+class Solution {
+    public int[][] merge(int[][] intervals) {
+        if (intervals == null || intervals.length <= 1) return intervals;
+        Arrays.sort(intervals, (a, b) -> Integer.compare(a[0], b[0]));
+
+        List<int[]> res = new ArrayList<>();
+        int[] newInterval = intervals[0];
+        res.add(newInterval);
+        for (int[] interval: intervals) {
+            if (interval[0] <= newInterval[1]) {
+                newInterval[1] = Math.max(newInterval[1], interval[1]);
+            } else{
+                newInterval = interval;
+                res.add(newInterval);
             }
         }
-        res.add(new Interval(start, end));
-        return res;
+        return res.toArray(new int[res.size()][]);
     }
+}
