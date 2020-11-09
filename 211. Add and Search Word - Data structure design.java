@@ -1,54 +1,49 @@
-class WordDictionary {
-    class TrieNode {
-        TrieNode[] children;
-        boolean isWord;
-        String word;
-
-    public TrieNode() {
-        children = new TrieNode[26];
-        isWord = false;
-        word = "";
-    }
+class TrieNode{
+    Map<Character, TrieNode> children = new HashMap<>();
+    boolean word = false;
+    public TrieNode(){}
 }
-    
-    private TrieNode root;
-
+class WordDictionary {
+    TrieNode trie;
     /** Initialize your data structure here. */
     public WordDictionary() {
-        root = new TrieNode();
+        trie = new TrieNode();
     }
     
     /** Adds a word into the data structure. */
     public void addWord(String word) {
-        TrieNode node = root;
-        for (int i = 0; i < word.length(); i++) {
-            int j = word.charAt(i) - 'a';
-            if (node.children[j] == null) {
-                node.children[j] = new TrieNode();
+        TrieNode node = trie;
+        for (char ch : word.toCharArray()){
+            if (!node.children.containsKey(ch)){
+                node.children.put(ch, new TrieNode());
             }
-            node = node.children[j];
-        }
-        node.isWord = true;
-        node.word = word;
+            node = node.children.get(ch);
+        } 
+        node.word = true;
     }
     
+    public boolean searchInNode(String word, TrieNode node){
+        for (int i = 0; i < word.length(); i++){
+            char ch = word.charAt(i);
+            if (!node.children.containsKey(ch)){
+                if (ch == '.'){
+                    for (char x : node.children.keySet()){
+                        TrieNode child = node.children.get(x);
+                        if(searchInNode(word.substring(i + 1), child)){
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            } else{
+                node = node.children.get(ch);
+            }
+        }
+        return node.word;
+    }
     /** Returns if the word is in the data structure. A word could contain the dot character '.' to represent any one letter. */
     public boolean search(String word) {
-        return find(word, root, 0);
-    }
-
-    public boolean find(String word, TrieNode node, int index) {
-        if (index == word.length()) return node.isWord;//!node.word.equals("");
-        if (word.charAt(index) == '.') {
-            for (TrieNode temp : node.children) {
-                if (temp != null && find(word, temp, index + 1)) return true;
-            }
-            return false;
-        } else {
-            int j = word.charAt(index) - 'a';
-            TrieNode temp = node.children[j];
-            return temp != null && find(word, temp, index + 1);
-        }
+        return searchInNode(word, trie);
     }
 }
 
